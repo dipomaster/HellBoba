@@ -22,7 +22,7 @@ namespace Fungus
 
         [Tooltip("The canvas UI object")]
         [SerializeField] protected Canvas dialogCanvas;
-
+        public Stage stage;
         [Tooltip("The name text UI object")]
         [SerializeField] protected Text nameText;
         [Tooltip("TextAdapter will search for appropriate output on this GameObject if nameText is null")]
@@ -348,7 +348,7 @@ namespace Fungus
                 var activeStages = Stage.ActiveStages;
                 for (int i = 0; i < activeStages.Count; i++)
                 {
-                    var stage = activeStages[i];
+                     stage = activeStages[i];
                     if (stage.DimPortraits)
                     {
                         var charactersOnStage = stage.CharactersOnStage;

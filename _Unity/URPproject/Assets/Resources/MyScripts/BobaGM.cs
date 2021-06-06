@@ -4,6 +4,7 @@ public class BobaGM : MonoBehaviour
 {
     public GameObject[] positions;
     public GameObject Cup,Table;
+    private Boba orderDrink;
     public float speed;
     private float Acceleration = 15;
 
@@ -52,27 +53,11 @@ public class BobaGM : MonoBehaviour
                 
                 move = false;
             }
-            //float step = (Mathf.Log(speed * Time.time+1,10));
-            //float step = 5 /(speed* Time.time);
-
-            //transform.position=  Vector3.MoveTowards(transform.position, positions[i].transform.position,step);
-            //Debug.Log(step);
-
-            //if ((transform.position.x > positions[i].transform.position.x-1) && (Speed < MaxSpeed))
-                //Speed = Speed - (Acceleration * Time.deltaTime);
-            //if ((transform.position.x<positions[i].transform.position.x-4) && (Speed > -MaxSpeed))
-            //    Speed = Speed + (Acceleration * Time.deltaTime);
-            //else
-            //{
-            //    if (Speed > Deceleration * Time.deltaTime)
-            //        Speed = Speed - (Deceleration * Time.deltaTime);
-            //    else if (Speed < -Deceleration * Time.deltaTime)
-            //        Speed = Speed + (Deceleration * Time.deltaTime);
-            //    else
-            //        Speed = 0;
-            //}
-
-            //transform.position = new Vector3(transform.position.x + Speed * Time.deltaTime, transform.position.y, transform.position.z);
         }
     }
+    public void OrderBoba()
+    {
+       // orderDrink.
+    }
+
 }
