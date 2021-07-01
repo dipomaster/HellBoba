@@ -1,10 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class liquid : Spawner
+public class Liquid : PearlSpwnr
 {
-   
     // Start is called before the first frame update
- 
+
+    public override void Initialize()
+    {
+        if (cup == null)
+        {
+            cup = GameObject.FindGameObjectWithTag("Cup").GetComponent<Boba>();
+        }
+        drop = type[cup.TeasType];
+        dropsMax = cup.nTeas;
+    }
 }

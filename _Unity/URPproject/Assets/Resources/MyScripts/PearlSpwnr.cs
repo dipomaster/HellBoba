@@ -1,24 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class PearlSpwnr : Spawner
 {
     public Boba cup;
+    public GameObject[] type;
+    public int i= 0;
+
     // Start is called before the first frame update
-    void Start()
-    {
-        
+    public override void Initialize()
+    { 
+        if (cup == null)
+        {
+            cup = GameObject.FindGameObjectWithTag("Cup").GetComponent<Boba>();
+        }
+
+        drop = type[i];
+        dropsMax = cup.nPearls;
     }
-
-    // Update is called once per frame
-    void Update()
+    public override void Spawn()
     {
-        
-    }
-
-    void Spawn()
-    {
-
+        base.Spawn();
+        go.transform.parent = cup.transform;
     }
 }

@@ -1,23 +1,23 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Boba : MonoBehaviour
 {
-        public int nPearls;
-        public GameObject[] pearls;
-        public int nPowders;
-        public GameObject[] powders;
-        public int nTeas;
-        public GameObject[] Teas;
-        public int nToppings;
-        public GameObject[] Toppings;
-        public bool Ice;
+    public int nPearls;
+    public int pearlsType;
+    public int nPowders;
+    public int powdersType;
+    public int nTeas;
+    public int TeasType;
+    public int nToppings;
+    public int ToppingsType;
+    public bool Ice;
+
     public struct Drink
     {
-        
 
-    }public Drink order;
+    }
+
+    public Drink order;
 
     //public void CreateDrink(Drink _drink)
     //{
@@ -31,10 +31,8 @@ public class Boba : MonoBehaviour
     //    order.Toppings = _drink.Toppings;
     //    order.Ice = _drink.Ice;
 
-        
     //}
     private void Update()
     {
-        
     }
 }

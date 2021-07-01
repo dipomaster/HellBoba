@@ -6,6 +6,8 @@ TagManager:
   tags:
   - UICam
   - surface
+  - Cup
+  - Grab
   layers:
   - Default
   - TransparentFX

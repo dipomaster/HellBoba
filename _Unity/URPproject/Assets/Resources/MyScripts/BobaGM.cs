@@ -1,10 +1,13 @@
 using UnityEngine;
+using System.Collections;
+using System.Collections.Generic;
 
 public class BobaGM : MonoBehaviour
 {
     public GameObject[] positions;
-    public GameObject Cup,Table;
-    private Boba orderDrink;
+    public GameObject Cup, Table;
+    public Boba orderDrink;
+    public Boba currentDrink;
     public float speed;
     private float Acceleration = 15;
 
@@ -22,11 +25,10 @@ public class BobaGM : MonoBehaviour
         Cup.GetComponent<Animator>().SetBool("Move", true);
         Table.GetComponent<Animator>().SetBool("_TableTransition", true);
         //GetComponent<Animator>().SetBool("_move", true);
-        
 
         Deceleration = Random.Range(0.5f, 0.75f);
         Debug.Log(Deceleration);
-                GetComponent<Animator>().SetFloat("_COffset", Deceleration);
+        GetComponent<Animator>().SetFloat("_COffset", Deceleration);
         MaxSpeed = Time.time;
         move = true;
     }
@@ -34,6 +36,15 @@ public class BobaGM : MonoBehaviour
     // Start is called before the first frame update
     private void Start()
     {
+        orderDrink.nPearls=1;
+         orderDrink.pearlsType=0;
+         orderDrink.nPowders=1;
+         orderDrink.powdersType=0;
+         orderDrink.nTeas=1;
+         orderDrink.TeasType=0;
+         orderDrink.nToppings=1;
+         orderDrink.ToppingsType=0;
+         orderDrink.Ice=true;
     }
 
     //Don't touch this
@@ -45,19 +56,36 @@ public class BobaGM : MonoBehaviour
     {
         if (move)
         {
-            if (Time.time > MaxSpeed + (1/ Deceleration))
+            if (Time.time > MaxSpeed + (1 / Deceleration))
             {
                 Cup.GetComponent<Animator>().SetBool("Move", false);
                 Table.GetComponent<Animator>().SetBool("_TableTransition", false);
                 //GetComponent<Animator>().SetBool("_move", false);
-                
+
                 move = false;
             }
         }
-    }
-    public void OrderBoba()
-    {
-       // orderDrink.
+        currentDrink = Cup.GetComponent<Boba>();
+        Debug.Log(currentDrink.pearlsType);
+      orderDrink.pearlsType = 0;
+        Debug.Log(orderDrink.pearlsType);
+
+        if (orderDrink.pearlsType!= currentDrink.pearlsType ){
+            Debug.Log("diffrent type pearl");
+        }
+
     }
 
+    public void OrderBoba()
+    {
+         orderDrink.nPearls=1;
+        orderDrink.pearlsType = 0;
+        orderDrink.nPowders=1;
+         orderDrink.powdersType=0;
+         orderDrink.nTeas=1;
+         orderDrink.TeasType=0;
+         orderDrink.nToppings=1;
+         orderDrink.ToppingsType=0;
+         orderDrink.Ice=true;
+    }
 }
