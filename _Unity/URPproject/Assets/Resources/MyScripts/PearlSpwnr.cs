@@ -16,6 +16,7 @@ public class PearlSpwnr : Spawner
 
         drop = type[i];
         dropsMax = cup.nPearls;
+        cup.pearlsType = i;
     }
     public override void Spawn()
     {

@@ -44,9 +44,11 @@ public class Spawner : MonoBehaviour
         for (j = 0; j < burstSize; j++)
         {
             go = Instantiate(drop, transform.position, Quaternion.identity);
-            go.GetComponent<Rigidbody>().AddForce(Vector3.up * -1);
+            go.GetComponent<Rigidbody>().AddForce(new Vector3(Random.Range(0, 0.2f),1,Random.Range(0, 0.2f)) * -1);
             go.transform.parent = this.transform;
+            
             dropsinscene++;
+
         }
         pour = false;
     }

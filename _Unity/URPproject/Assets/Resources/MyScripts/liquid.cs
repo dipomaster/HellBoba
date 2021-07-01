@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Liquid : PearlSpwnr
+public class liquid : PearlSpwnr
 {
     // Start is called before the first frame update
 
