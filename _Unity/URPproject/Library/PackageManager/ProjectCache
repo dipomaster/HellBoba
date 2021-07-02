@@ -231,6 +231,7 @@ m_ResolvedPackages:
     - 1.3.7
     - 1.3.8
     - 1.3.9
+    - 1.4.9
     - 1.5.7
     - 2.0.0-preview.6
     - 2.0.0-preview.8
@@ -3467,6 +3468,7 @@ m_ResolvedPackages:
     - 5.0.0-pre.1
     - 5.0.0-pre.2
     - 5.0.0
+    - 6.0.0-pre.2
     compatible:
     - 5.0.0
     verified: 5.0.0
@@ -3502,7 +3504,7 @@ m_ResolvedPackages:
   entitlements:
     isAllowed: 1
   isAssetStorePackage: 0
-  datePublishedTicks: 0
+  datePublishedTicks: 637526395060000000
   documentationUrl: 
   hasRepository: 1
   repository:
