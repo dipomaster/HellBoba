@@ -10,7 +10,8 @@ public class liquid : PearlSpwnr
         {
             cup = GameObject.FindGameObjectWithTag("Cup").GetComponent<Boba>();
         }
-        drop = type[cup.TeasType];
+        drop = type[i];
         dropsMax = cup.nTeas;
+        cup.TeasType = i;
     }
 }

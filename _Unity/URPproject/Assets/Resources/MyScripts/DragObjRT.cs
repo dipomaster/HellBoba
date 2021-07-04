@@ -7,6 +7,7 @@ using UnityEngine.EventSystems;
 public class DragObjRT : MonoBehaviour, IPointerDownHandler,IPointerUpHandler, IDragHandler
 {
     private Vector3 mOffset;
+    public bool Up=false, Side=false;
     private float mZCoord;
     //[SerializeField] protected Camera UICamera;
     //[SerializeField] protected RectTransform RawImageRectTrans;
@@ -27,8 +28,9 @@ public class DragObjRT : MonoBehaviour, IPointerDownHandler,IPointerUpHandler, I
     //        Debug.Log("No hit object");
     //    }
     //}
-    public Camera camUp;
-    public GameObject selectedObj,spwnr;
+    public Camera camUp,camSide;
+    public GameObject selectedObj,spwnr,fosset;
+    bool grab, click;
 
     GraphicRaycaster gr;
     List<RaycastResult> results;
@@ -61,22 +63,43 @@ public class DragObjRT : MonoBehaviour, IPointerDownHandler,IPointerUpHandler, I
                 Vector2 localPoint;
                 RectTransformUtility.ScreenPointToLocalPointInRectangle(RawImageRectTrans, eventData.position, null, out localPoint);
                 Vector2 normalizedPoint = Rect.PointToNormalized(RawImageRectTrans.rect, localPoint);
-                var renderRay = camUp.ViewportPointToRay(normalizedPoint);
-                if (Physics.Raycast(renderRay, out var raycastHit))
+                if (Up)
                 {
-                    if (raycastHit.collider.gameObject.CompareTag("Grab"))
+                    var renderRay = camUp.ViewportPointToRay(normalizedPoint);
+                    if (Physics.Raycast(renderRay, out var raycastHit))
                     {
-                        // Debug.Log("Hit: " + raycastHit.collider.gameObject.name);
-                        selectedObj = raycastHit.collider.gameObject;
-                        mZCoord = camUp.WorldToScreenPoint(selectedObj.transform.position).y;
-                        mOffset = selectedObj.transform.position - GetMouseWorldPos();
+                        if (raycastHit.collider.gameObject.CompareTag("Grab"))
+                        {
+                            grab = true;
+                            // Debug.Log("Hit: " + raycastHit.collider.gameObject.name);
+                            selectedObj = raycastHit.collider.gameObject;
+                            mZCoord = camUp.WorldToScreenPoint(selectedObj.transform.position).y;
+                            mOffset = selectedObj.transform.position - GetMouseWorldPos();
+                        }
                     }
-                        //Debug.Log(mZCoord);
+                    else
+                    {
+                        Debug.Log("No hit object");
+                        selectedObj = null;
+                    }
                 }
-                else
+                else if (Side)
                 {
-                    Debug.Log("No hit object");
-                    selectedObj = null;
+                    var renderRay = camSide.ViewportPointToRay(normalizedPoint);
+                    if (Physics.Raycast(renderRay, out var raycastHit))
+                    {
+                        if (raycastHit.collider.gameObject.CompareTag("Click"))
+                        {
+                            click = true;
+                            selectedObj = raycastHit.collider.gameObject;
+                        }
+                        Debug.Log(raycastHit.collider.gameObject.transform.name);
+                    }
+                    else
+                    {
+                        Debug.Log("No hit object");
+                        selectedObj = null;
+                    }
                 }
             }
         }
@@ -97,15 +120,25 @@ public class DragObjRT : MonoBehaviour, IPointerDownHandler,IPointerUpHandler, I
     }
     public void OnPointerUp(PointerEventData eventData)
     {
-        selectedObj.transform.parent=null;
-        var go=Instantiate(spwnr, selectedObj.transform.position,Quaternion.identity);
-        go.SetActive(true);
-        go.GetComponent<PearlSpwnr>().i = selectedObj.GetComponent<DragObj>().type; 
-        Destroy(selectedObj);
+        if (grab)
+        {
+            selectedObj.transform.parent = null;
+            var go = Instantiate(spwnr, selectedObj.transform.position, Quaternion.identity);
+            go.SetActive(true);
+            go.GetComponent<PearlSpwnr>().i = selectedObj.GetComponent<DragObj>().type;
+            grab = false;
+            Destroy(selectedObj);
+        }
+        if (click)
+        {
+            fosset.GetComponent<Pour>().type_selected = selectedObj.GetComponent<DragObj>().type;
+            fosset.GetComponent<Pour>().PourLiquid();
+            click = false;
+        }
     }
     public void OnDrag(PointerEventData eventData)
     {
-        if (selectedObj)
+        if (selectedObj&&grab)
         {
             selectedObj.transform.position = GetMouseWorldPos() + mOffset;
         }

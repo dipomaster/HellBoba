@@ -4,6 +4,7 @@ public class Pour : MonoBehaviour
 {
     public GameObject cupLiquid, cupHolder;
     public float fillLevel, fillMin, fillMax, speedFill, t = 0;
+    public int type_selected;
     private bool pouring = false;
 
     // Start is called before the first frame update
@@ -39,6 +40,7 @@ public class Pour : MonoBehaviour
         foreach (Transform item in transform)
         {
             item.gameObject.SetActive(true);
+            item.gameObject.GetComponent<liquid>().i = type_selected;
             pouring = true;
         }
     }

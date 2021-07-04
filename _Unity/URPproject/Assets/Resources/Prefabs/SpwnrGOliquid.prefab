@@ -28,7 +28,7 @@ Transform:
   m_GameObject: {fileID: 2130344216764357470}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -48,7 +48,7 @@ MeshRenderer:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2130344216764357470}
-  m_Enabled: 1
+  m_Enabled: 0
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
@@ -95,19 +95,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c977995665597a64ba7d7d832f493054, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pour: 0
-  drop: {fileID: 0}
+  pour: 1
+  drop: {fileID: 6652539360675959737, guid: 34973dcdda6ae104d9205c467e65d3bd, type: 3}
   timeStart: 0
-  timeElapsed: 0
+  timeElapsed: 2
   dropsinscene: 0
   dropsMax: 0
-  timeMultiplier: 0
-  burstSize: 0
+  timeMultiplier: 1000
+  burstSize: 1
   go: {fileID: 0}
   cup: {fileID: 0}
   type:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 6652539360675959737, guid: 34973dcdda6ae104d9205c467e65d3bd, type: 3}
+  - {fileID: 8702778938082212231, guid: 58292e648622e3e498c7c76b49e38e95, type: 3}
+  - {fileID: 2782342363102359780, guid: 567a72c88822e8247baaec3c65763a39, type: 3}
+  - {fileID: 5038610971623908497, guid: bfe8bbf50d33ffe47b8fbc513802be92, type: 3}
   i: 0

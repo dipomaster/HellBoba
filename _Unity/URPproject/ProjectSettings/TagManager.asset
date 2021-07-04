@@ -8,6 +8,9 @@ TagManager:
   - surface
   - Cup
   - Grab
+  - Laser
+  - Enemy
+  - Click
   layers:
   - Default
   - TransparentFX
