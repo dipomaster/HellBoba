@@ -74,7 +74,7 @@ PrefabInstance:
     - target: {fileID: 6652539360675959743, guid: 34973dcdda6ae104d9205c467e65d3bd, type: 3}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2100006, guid: bae110eee250e4b418b188f4ae4e3170, type: 3}
+      objectReference: {fileID: 2100000, guid: 3991b31674d5f30418db0fac50a284c3, type: 2}
     - target: {fileID: 6652539360675959743, guid: 34973dcdda6ae104d9205c467e65d3bd, type: 3}
       propertyPath: m_Parameters.colorGradient.key0.b
       value: 0.9433962

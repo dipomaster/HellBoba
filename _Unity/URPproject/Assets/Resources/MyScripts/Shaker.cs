@@ -5,7 +5,7 @@ using UnityEngine;
 public class Shaker : MonoBehaviour
 {
     public float shakeFX, time_max, time_start;
-    public GameObject sideCam;
+    public GameObject sideCam,GM;
     GameObject cup,liquid;
     Vector4 ogTiling;
     bool shakerON=false;
@@ -40,5 +40,6 @@ public class Shaker : MonoBehaviour
         sideCam.GetComponent<Animator>().SetBool("_shake", true);
         ogTiling= liquid.GetComponent<Renderer>().material.GetVector("UVtiling");
         shakerON = true;
+        GM.GetComponent<BobaGM>().airMove();
     }
 }

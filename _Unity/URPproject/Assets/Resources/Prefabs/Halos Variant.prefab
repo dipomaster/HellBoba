@@ -72,6 +72,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Halos Variant
       objectReference: {fileID: 0}
+    - target: {fileID: 8196577114593143540, guid: 3c6cf9425c97f794487bcc93dbcde889, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0d615160a7c2a194a82e736ebf293a18, type: 2}
     - target: {fileID: 8299333351625922111, guid: 3c6cf9425c97f794487bcc93dbcde889, type: 3}
       propertyPath: m_Radius
       value: 0.065
