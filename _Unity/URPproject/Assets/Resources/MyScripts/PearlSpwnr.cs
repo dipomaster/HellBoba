@@ -21,6 +21,6 @@ public class PearlSpwnr : Spawner
     public override void Spawn()
     {
         base.Spawn();
-        go.transform.parent = cup.transform;
+        //go.transform.parent = cup.transform;
     }
 }

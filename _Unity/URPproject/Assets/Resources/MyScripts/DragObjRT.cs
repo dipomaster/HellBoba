@@ -1,14 +1,16 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.UI;
 
-public class DragObjRT : MonoBehaviour, IPointerDownHandler,IPointerUpHandler, IDragHandler
+public class DragObjRT : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IDragHandler
 {
     private Vector3 mOffset;
-    public bool Up=false, Side=false;
+    public bool Up = false, Side = false;
     private float mZCoord;
+    public Texture2D cursorTexture;
+    public CursorMode cursorMode = CursorMode.Auto;
+    public Vector2 hotSpot = Vector2.zero;
     //[SerializeField] protected Camera UICamera;
     //[SerializeField] protected RectTransform RawImageRectTrans;
     //[SerializeField] protected Camera RenderToTextureCamera;
@@ -28,18 +30,19 @@ public class DragObjRT : MonoBehaviour, IPointerDownHandler,IPointerUpHandler, I
     //        Debug.Log("No hit object");
     //    }
     //}
-    public Camera camUp,camSide;
-    public GameObject selectedObj,spwnr,fosset;
-    bool grab, click;
+    public Camera camUp, camSide;
 
-    GraphicRaycaster gr;
-    List<RaycastResult> results;
+    public GameObject selectedObj, spwnr, fosset;
+    private bool grab, click, select;
 
-    void Start()
+    private GraphicRaycaster gr;
+    private List<RaycastResult> results;
+
+    private void Start()
     {
         gr = gameObject.GetComponent<GraphicRaycaster>();
-       
     }
+
     public void OnPointerDown(PointerEventData eventData)
     {
         results = new List<RaycastResult>();
@@ -51,13 +54,8 @@ public class DragObjRT : MonoBehaviour, IPointerDownHandler,IPointerUpHandler, I
             if (results[i].gameObject.name == "RawImage")
             //this is the one we need.
             {
-               // Debug.Log("Touched the screen!"); //yeah!!
-                                                  //So here we have the fist part working. I can get the screen and I am 
-                                                  //guessing that somewhere in results[i], the coordinates I need for the second cast
-                                                  //are waiting for me to understand what to do next...               
-                                                  //I need to access the coordinates of the first hit (results[i]) and feed 
-                                                  //it to a raycast that originates from the second cam to the extrapolated point which
-                                                  //would let me access the 3d prefab. 
+                // Debug.Log("Touched the screen!"); //yeah!!
+
                 RectTransform RawImageRectTrans = results[i].gameObject.GetComponent<RectTransform>();
                 ///Here is what I tried (not working).
                 Vector2 localPoint;
@@ -68,42 +66,76 @@ public class DragObjRT : MonoBehaviour, IPointerDownHandler,IPointerUpHandler, I
                     var renderRay = camUp.ViewportPointToRay(normalizedPoint);
                     if (Physics.Raycast(renderRay, out var raycastHit))
                     {
-                        if (raycastHit.collider.gameObject.CompareTag("Grab"))
+                        switch (raycastHit.collider.gameObject.tag)
                         {
-                            grab = true;
-                            // Debug.Log("Hit: " + raycastHit.collider.gameObject.name);
-                            selectedObj = raycastHit.collider.gameObject;
-                            mZCoord = camUp.WorldToScreenPoint(selectedObj.transform.position).y;
-                            mOffset = selectedObj.transform.position - GetMouseWorldPos();
+
+                            case "Grab":
+                                {
+                                    grab = true;
+                                    // Debug.Log("Hit: " + raycastHit.collider.gameObject.name);
+                                    Select(raycastHit.collider.gameObject);
+                                    mZCoord = camUp.WorldToScreenPoint(selectedObj.transform.position).y;
+                                    mOffset = selectedObj.transform.position - GetMouseWorldPos();
+                                    break;
+                                }
+                            default:
+                                break;
                         }
                     }
                     else
                     {
                         Debug.Log("No hit object");
+                        //Cursor.SetCursor(null, Vector2.zero, cursorMode);
                         selectedObj = null;
                     }
                 }
                 else if (Side)
-                {
+                {                    
                     var renderRay = camSide.ViewportPointToRay(normalizedPoint);
                     if (Physics.Raycast(renderRay, out var raycastHit))
                     {
-                        if (raycastHit.collider.gameObject.CompareTag("Click"))
+                        switch (raycastHit.collider.gameObject.tag)
                         {
-                            click = true;
-                            selectedObj = raycastHit.collider.gameObject;
+                            case "Click":
+                                {
+                                    click = true;
+                                    Select(raycastHit.collider.gameObject);
+                                    break;
+                                }
+                            //Debug.Log(raycastHit.collider.gameObject.transform.name);
+                            case "ClickandSelect":
+                                {
+                                    select = true;
+                                    Select(raycastHit.collider.gameObject);
+                                    cursorTexture = selectedObj.GetComponent<CursorChange>().cursorTexture;
+                                    Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
+                                    break;
+                                }
+                            default:
+                                break;
                         }
-                        Debug.Log(raycastHit.collider.gameObject.transform.name);
+
+                        
                     }
                     else
                     {
                         Debug.Log("No hit object");
-                        selectedObj = null;
+                        if (selectedObj)
+                        {
+                            selectedObj.GetComponent<Outline>().enabled = false; 
+                            selectedObj = null;
+                        }
+                        //selectedObj.GetComponent<Outline>().OutlineColor = Color.green;
+                        Cursor.SetCursor(null, Vector2.zero, cursorMode);
+                        
                     }
                 }
             }
         }
+
+        
     }
+
     private void FixedUpdate()
     {
         //if (selectedObj)
@@ -118,6 +150,7 @@ public class DragObjRT : MonoBehaviour, IPointerDownHandler,IPointerUpHandler, I
         //mousePoint.y = mZCoord;
         return camUp.ScreenToWorldPoint(mousePoint);
     }
+
     public void OnPointerUp(PointerEventData eventData)
     {
         if (grab)
@@ -136,11 +169,28 @@ public class DragObjRT : MonoBehaviour, IPointerDownHandler,IPointerUpHandler, I
             click = false;
         }
     }
+
     public void OnDrag(PointerEventData eventData)
     {
-        if (selectedObj&&grab)
+        if (selectedObj && grab)
         {
             selectedObj.transform.position = GetMouseWorldPos() + mOffset;
+        }
+    }
+    void Select(GameObject go)
+    {
+        if (selectedObj != null)                    
+            selectedObj.GetComponent<Outline>().enabled = false;               
+            selectedObj = go;
+        if (selectedObj.GetComponent<Outline>())
+        {
+            selectedObj.GetComponent<Outline>().enabled = true;
+            selectedObj.GetComponent<Outline>().OutlineColor = Color.green;
+        }
+        else
+        {
+            selectedObj.AddComponent<Outline>();
+            selectedObj.GetComponent<Outline>().OutlineColor = Color.green;
         }
     }
 }

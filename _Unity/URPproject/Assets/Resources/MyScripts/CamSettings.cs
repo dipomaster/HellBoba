@@ -1,48 +1,77 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class CamSettings : MonoBehaviour
 {
-    public Camera sideCam,upCam;
-    public float zoomDuration,zoomAmount,zoomCurrent;
-    private float startTime,t;
+    private Camera sideCam, upCam;
+    public Camera activeCam;
+    public bool switchCam,move;
+    public float zoomDuration, zoomAmount, zoomCurrent;
+    public Vector3 moveCam;
+    private float startTime, t;
     private bool zoom;
+    private DragObjRT canvasGM;
+
     // Start is called before the first frame update
-    void Start()
+    public virtual void Start()
     {
-        
+        canvasGM = GameObject.Find("Canvas").GetComponent<DragObjRT>();
+        upCam = canvasGM.camUp;
+        sideCam = canvasGM.camSide;
+        activeCam = upCam;
     }
 
     // Update is called once per frame
-    void Update()
+    public virtual void Update()
     {
-        if (zoom)
+        if (zoom)//zooms the camera according to the trigger's value
         {
-            sideCam.orthographicSize = Mathf.Lerp(zoomCurrent, zoomAmount, t * zoomDuration*2);
+            sideCam.orthographicSize = Mathf.Lerp(zoomCurrent, zoomAmount, t * zoomDuration * 2);
 
             t += 0.5f * Time.deltaTime;
             if (Time.time > startTime + zoomDuration)
             {
-
                 t = 0;
                 zoom = false;
-
+               
             }
         }
     }
-    private void OnTriggerEnter(Collider other)
+
+    public virtual void OnTriggerEnter(Collider other)
     {
         if (other.CompareTag("CamTrgr"))
         {
             // Debug.Log("CamTrgr");
             zoom = true;
             zoomCurrent = sideCam.orthographicSize;
-            zoomAmount= other.GetComponent<CamTrgr>().zoomAmount;
-            zoomDuration= other.GetComponent<CamTrgr>().zoomDuration;
+            zoomAmount = other.GetComponent<CamTrgr>().zoomAmount;
+            zoomDuration = other.GetComponent<CamTrgr>().zoomDuration;
+            move = other.GetComponent<CamTrgr>().move;
+            switchCam = other.GetComponent<CamTrgr>().switchCam;
             startTime = Time.time;
+
+            if (switchCam)
+            {
+                activeCam = sideCam;
+                canvasGM.Side = true;
+                canvasGM.Up = false;
+                sideCam.GetComponent<Camera>().enabled = true;
+                upCam.GetComponent<Camera>().enabled = false;
+            }
+            else
+            {
+                activeCam = upCam;
+                canvasGM.Side = false;
+                canvasGM.Up = true;
+                sideCam.GetComponent<Camera>().enabled = false;
+                upCam.GetComponent<Camera>().enabled = true;
+            }
+            if (move)
+            {
+                activeCam.GetComponent<Animator>().SetBool("_sideview", true);
+            }
+
         }
-        //Debug.Log("hello");
+        //Debug.Log(activeCam.name);
     }
-   
 }

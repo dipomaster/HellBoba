@@ -11,6 +11,9 @@ TagManager:
   - Laser
   - Enemy
   - Click
+  - CamTrgr
+  - ClickandSelect
+  - CamSet
   layers:
   - Default
   - TransparentFX
