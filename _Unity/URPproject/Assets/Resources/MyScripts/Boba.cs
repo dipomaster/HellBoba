@@ -34,5 +34,6 @@ public class Boba : MonoBehaviour
     //}
     private void Update()
     {
+
     }
 }
