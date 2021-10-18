@@ -6,6 +6,7 @@ public class DragObj : MonoBehaviour {
     
     public Camera camUP;
     public int type;
+    public GameObject powder;
     private Vector3 mOffset;
     private float mZCoord;
     private Transform mSlotPosition;
@@ -13,5 +14,6 @@ public class DragObj : MonoBehaviour {
     public bool mCanMove;
     private GameObject mSlot;
     float speed = 10f; 
+    
 
 }

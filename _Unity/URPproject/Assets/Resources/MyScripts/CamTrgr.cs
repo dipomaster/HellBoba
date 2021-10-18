@@ -5,5 +5,6 @@ using UnityEngine;
 public class CamTrgr : CamSettings
 
 {
-   
+    
+    
 }

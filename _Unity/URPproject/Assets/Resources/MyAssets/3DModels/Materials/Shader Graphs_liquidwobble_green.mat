@@ -51,10 +51,10 @@ Material:
     - opacitybody: 0.95
     - topSmooth: 0.6
     m_Colors:
-    - Color_3decd56b2f30499dafbd775639e94295: {r: 0.30481178, g: 1, b: 0.20392156, a: 1}
-    - Color_4056d86ebbb74beb9f332aa9d99607eb: {r: 0.0011124983, g: 0.23584908, b: 0.028793681, a: 0}
-    - Color_797488e008b84ebab595c8a4b7c19994: {r: 0.8313726, g: 0.9607843, b: 0.8489031, a: 1}
-    - Color_b88e44eeeb624341b15c87b7cac2ce6f: {r: 0.18431373, g: 0.9529412, b: 0.26655805, a: 1}
+    - Color_3decd56b2f30499dafbd775639e94295: {r: 1, g: 0.253816, b: 0.20392156, a: 1}
+    - Color_4056d86ebbb74beb9f332aa9d99607eb: {r: 0.23529412, g: 0.0064485194, b: 0, a: 0}
+    - Color_797488e008b84ebab595c8a4b7c19994: {r: 0, g: 0, b: 0, a: 1}
+    - Color_b88e44eeeb624341b15c87b7cac2ce6f: {r: 0.05660379, g: 0, b: 0.00607255, a: 1}
     - UVtiling: {r: 0.5, g: 1, b: 0, a: 0}
-    - botC: {r: 0.012148457, g: 0.1981132, b: 0.036473222, a: 0}
+    - botC: {r: 0.2, g: 0.011764705, b: 0.015271714, a: 0}
   m_BuildTextureStacks: []

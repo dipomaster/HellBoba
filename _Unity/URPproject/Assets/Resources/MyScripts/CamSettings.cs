@@ -10,6 +10,7 @@ public class CamSettings : MonoBehaviour
     private float startTime, t;
     private bool zoom;
     private DragObjRT canvasGM;
+    public Animator transition;
 
     // Start is called before the first frame update
     public virtual void Start()
@@ -18,6 +19,8 @@ public class CamSettings : MonoBehaviour
         upCam = canvasGM.camUp;
         sideCam = canvasGM.camSide;
         activeCam = upCam;
+        transition = GameObject.Find("Transition").GetComponent<Animator>();
+        transition.enabled = false;
     }
 
     // Update is called once per frame
@@ -52,11 +55,14 @@ public class CamSettings : MonoBehaviour
 
             if (switchCam)
             {
+                transition.enabled=true;
                 activeCam = sideCam;
                 canvasGM.Side = true;
                 canvasGM.Up = false;
+                
                 sideCam.GetComponent<Camera>().enabled = true;
                 upCam.GetComponent<Camera>().enabled = false;
+                
             }
             else
             {

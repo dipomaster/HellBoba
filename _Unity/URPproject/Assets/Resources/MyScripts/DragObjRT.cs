@@ -11,6 +11,7 @@ public class DragObjRT : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
     public Texture2D cursorTexture;
     public CursorMode cursorMode = CursorMode.Auto;
     public Vector2 hotSpot = Vector2.zero;
+    public GameObject powder;
     //[SerializeField] protected Camera UICamera;
     //[SerializeField] protected RectTransform RawImageRectTrans;
     //[SerializeField] protected Camera RenderToTextureCamera;
@@ -109,6 +110,8 @@ public class DragObjRT : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, 
                                     Select(raycastHit.collider.gameObject);
                                     cursorTexture = selectedObj.GetComponent<CursorChange>().cursorTexture;
                                     Cursor.SetCursor(cursorTexture, hotSpot, cursorMode);
+                                    powder.GetComponent<ParticleSystem>().startColor = powder.GetComponent<Powder_spwnr>().colorLib[selectedObj.GetComponent<DragObj>().type];
+                                    powder.GetComponent<ParticleSystem>().Play(true);
                                     break;
                                 }
                             default:
