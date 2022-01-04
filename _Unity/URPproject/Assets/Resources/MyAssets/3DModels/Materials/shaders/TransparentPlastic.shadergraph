@@ -379,6 +379,8 @@
         "m_GuidSerialized": "91b2c4de-f9de-4fcd-a8c0-b7d4034293e0"
     },
     "m_Name": "Color",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Color_236af06ff00d4bd8982e1486d1a7ee89",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
@@ -706,6 +708,8 @@
         "m_GuidSerialized": "02985849-ddd8-49be-8f8b-47bece8da758"
     },
     "m_Name": "fresnel",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_76a3cbb567734f2bb4adfab0b1315a7e",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
@@ -851,6 +855,8 @@
         "m_GuidSerialized": "0b3ae709-cf54-4014-86dc-ef381299e6b4"
     },
     "m_Name": "metallic",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_9a6d423486784bd384fdeff82cda6341",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,
@@ -1158,6 +1164,8 @@
         "m_GuidSerialized": "c6481f4b-43cb-4588-8c8e-478ebc0cea1d"
     },
     "m_Name": "Alpha",
+    "m_DefaultRefNameVersion": 0,
+    "m_RefNameGeneratedByDisplayName": "",
     "m_DefaultReferenceName": "Vector1_bb985576620948c3bc30fca74cb7d20c",
     "m_OverrideReferenceName": "",
     "m_GeneratePropertyBlock": true,

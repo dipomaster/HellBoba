@@ -16,7 +16,7 @@ public class BobaGM : MonoBehaviour
 
     private int i;
     private float MaxSpeed = 10,startTime=1;
-    private bool move = false,orderIN=false,air=false;
+    private bool move = false, orderIN = false, air = false, reset = false;
     private float Speed = 0;
     static float t = 0.0f;
     private ParticleSystem ps;
@@ -40,6 +40,15 @@ public class BobaGM : MonoBehaviour
        // Debug.LogWarning(move);
     }
 
+    public void Reset()
+    {
+        if (!reset)
+        {
+            Cup.GetComponent<Animator>().SetBool("reset", true);
+            reset = true;
+        }
+
+    }
     // Start is called before the first frame update
     private void Start()
     {
@@ -96,7 +105,16 @@ public class BobaGM : MonoBehaviour
         //    Table.GetComponent<Animator>().SetBool("_TableTransition", false);
         //    ///move = false;
         //}
+        if (reset)
+        {
+            if (Time.time > MaxSpeed + (1 / Deceleration))
+            {
+                Cup.GetComponent<Animator>().SetBool("reset", false);
 
+                reset = false;
+
+            }
+        }
 
 
     }

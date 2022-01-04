@@ -158,7 +158,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5537499773481517876}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: -0.455, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5254999, z: 0}
   m_LocalScale: {x: 1.3, y: 1.3, z: 1.3}
   m_Children:
   - {fileID: 5537499773209270644}
@@ -275,6 +275,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   camUP: {fileID: 0}
   type: 0
+  powder: {fileID: 0}
   mCanMove: 0
 --- !u!114 &3888431881813716032
 MonoBehaviour:
