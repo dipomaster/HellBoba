@@ -38234,10 +38234,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 2171396047697973076, guid: a9d3959c4039df546ab479e585b76695, type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 828.3275
-      objectReference: {fileID: 0}
     - target: {fileID: 3751693043379163478, guid: a9d3959c4039df546ab479e585b76695, type: 3}
       propertyPath: cam
       value: 
@@ -38370,6 +38366,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 844654064}
+    - target: {fileID: 3751693044456377631, guid: a9d3959c4039df546ab479e585b76695, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3751693044672640336, guid: a9d3959c4039df546ab479e585b76695, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3751693044957038151, guid: a9d3959c4039df546ab479e585b76695, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
