@@ -5,6 +5,7 @@ public class PearlSpwnr : Spawner
     public Boba cup;
     public GameObject[] type;
     public int i= 0;
+    public float timer;
 
     // Start is called before the first frame update
     public override void Initialize()
@@ -22,5 +23,7 @@ public class PearlSpwnr : Spawner
     {
         base.Spawn();
         //go.transform.parent = cup.transform;
+        go.AddComponent<TimedObject>();
+        go.GetComponent<TimedObject>().timer = timer;
     }
 }

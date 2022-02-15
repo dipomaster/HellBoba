@@ -32,15 +32,15 @@ public class Wobble : MonoBehaviour
     {
         time += Time.deltaTime;
         wobbleFX();
-        if (!rb.IsSleeping())
-        {
-            Whirpool();
-        }
-        else
-        {
+        //if (!rb.IsSleeping())
+        //{
+        //    Whirpool();
+        //}
+        //else
+        //{
             
-            rend.material.SetFloat("_Speed", TextureSpeed);
-        }
+        //    rend.material.SetFloat("_Speed", TextureSpeed);
+        //}
     }
 
     private void Whirpool()

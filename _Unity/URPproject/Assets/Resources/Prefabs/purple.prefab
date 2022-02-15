@@ -64,12 +64,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 6bbe99e2f1a05db46a9ac47e2b0ad23f, type: 2}
     - target: {fileID: 6652539360675959743, guid: 34973dcdda6ae104d9205c467e65d3bd, type: 3}
+      propertyPath: m_Parameters.colorGradient.atime1
+      value: 65535
+      objectReference: {fileID: 0}
+    - target: {fileID: 6652539360675959743, guid: 34973dcdda6ae104d9205c467e65d3bd, type: 3}
       propertyPath: m_Parameters.colorGradient.key0.b
-      value: 0.93881756
+      value: 0.454902
       objectReference: {fileID: 0}
     - target: {fileID: 6652539360675959743, guid: 34973dcdda6ae104d9205c467e65d3bd, type: 3}
       propertyPath: m_Parameters.colorGradient.key0.g
-      value: 0.47450984
+      value: 0.31764707
+      objectReference: {fileID: 0}
+    - target: {fileID: 6652539360675959743, guid: 34973dcdda6ae104d9205c467e65d3bd, type: 3}
+      propertyPath: m_Parameters.colorGradient.key0.r
+      value: 0.4039216
+      objectReference: {fileID: 0}
+    - target: {fileID: 6652539360675959743, guid: 34973dcdda6ae104d9205c467e65d3bd, type: 3}
+      propertyPath: m_Parameters.colorGradient.key1.a
+      value: 0.7921569
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 34973dcdda6ae104d9205c467e65d3bd, type: 3}
