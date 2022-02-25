@@ -6,6 +6,7 @@ public class TimedObject : MonoBehaviour
 {
     public float timer;
     private float startTimer;
+    public string tag;
 
 
     private void FixedUpdate()
@@ -16,9 +17,9 @@ public class TimedObject : MonoBehaviour
         }
     }
 
-    private void OnCollisionEnter(Collision collision)
+    private void OnCollisionStay(Collision collision)
     {
-        if (collision.gameObject.CompareTag("table"))
+        if (!collision.gameObject.CompareTag(tag))
         {
             startTimer = Time.time;
         }

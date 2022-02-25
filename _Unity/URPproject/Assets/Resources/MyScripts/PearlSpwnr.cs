@@ -23,6 +23,7 @@ public class PearlSpwnr : Spawner
     {
         base.Spawn();
         //go.transform.parent = cup.transform;
+        go.tag = "Cup";
         go.AddComponent<TimedObject>();
         go.GetComponent<TimedObject>().timer = timer;
     }

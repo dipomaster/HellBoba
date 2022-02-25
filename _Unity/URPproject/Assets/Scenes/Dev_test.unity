@@ -41117,8 +41117,8 @@ Camera:
   m_GateFitMode: 2
   m_FOVAxisMode: 0
   m_SensorSize: {x: 32.3, y: 26.7}
-  m_LensShift: {x: 0, y: 0}
-  m_FocalLength: 10.79
+  m_LensShift: {x: -0, y: -0.03}
+  m_FocalLength: 77.7
   m_NormalizedViewPortRect:
     serializedVersion: 2
     x: 0
@@ -41127,7 +41127,7 @@ Camera:
     height: 1
   near clip plane: 0.3
   far clip plane: 1000
-  field of view: 19.9
+  field of view: 19.498137
   orthographic: 1
   orthographic size: 3
   m_Depth: 0
@@ -42054,6 +42054,10 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Cup
       objectReference: {fileID: 0}
+    - target: {fileID: 3491994454421340658, guid: effffea5ea7eb5a4f8a426e3d90306d7, type: 3}
+      propertyPath: m_TagString
+      value: Cup
+      objectReference: {fileID: 0}
     - target: {fileID: 4268813045135530824, guid: effffea5ea7eb5a4f8a426e3d90306d7, type: 3}
       propertyPath: m_LocalRotation.w
       value: 0.5
@@ -42334,7 +42338,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5983083279525666635, guid: 964cc856de395e54b8efc72039e8be60, type: 3}
       propertyPath: timer
-      value: 1
+      value: 1.5
       objectReference: {fileID: 0}
     - target: {fileID: 5983083279525666635, guid: 964cc856de395e54b8efc72039e8be60, type: 3}
       propertyPath: m_Enabled
