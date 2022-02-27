@@ -15,7 +15,7 @@ public class CamSettings : MonoBehaviour
     // Start is called before the first frame update
     public virtual void Start()
     {
-        canvasGM = GameObject.Find("Canvas").GetComponent<DragObjRT>();
+        canvasGM = GameObject.Find("UI").GetComponent<DragObjRT>();
         upCam = canvasGM.camUp;
         sideCam = canvasGM.camSide;
         activeCam = upCam;
