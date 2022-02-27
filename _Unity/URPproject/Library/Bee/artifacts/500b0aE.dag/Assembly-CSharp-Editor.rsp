@@ -308,6 +308,8 @@
 -r:"D:/Dev assets/Github/HellBoba/_Unity/URPproject/Library/PackageCache/com.unity.ext.nunit@1.0.6/net35/unity-custom/nunit.framework.dll"
 -r:"D:/Dev assets/Github/HellBoba/_Unity/URPproject/Library/PackageCache/com.unity.nuget.newtonsoft-json@2.0.0/Runtime/Newtonsoft.Json.dll"
 -r:"Library/Bee/artifacts/500b0aE.dag/Assembly-CSharp.ref.dll"
+-r:"Library/Bee/artifacts/500b0aE.dag/fluxy.ref.dll"
+-r:"Library/Bee/artifacts/500b0aE.dag/FluXYEditor.ref.dll"
 -r:"Library/Bee/artifacts/500b0aE.dag/Fungus.FungusLuaEditor.ref.dll"
 -r:"Library/Bee/artifacts/500b0aE.dag/Fungus.FungusLuaJSONCheckerEditor.ref.dll"
 -r:"Library/Bee/artifacts/500b0aE.dag/Fungus.LineEndingsEditor.ref.dll"
