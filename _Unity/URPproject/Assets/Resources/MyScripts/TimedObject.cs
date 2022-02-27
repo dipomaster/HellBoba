@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using TMPro;
 public class TimedObject : MonoBehaviour
 {
     public float timer;
     private float startTimer;
-    public string tag;
+    public string tag="Cup";
+    public TextMeshProUGUI ui;
 
 
     private void FixedUpdate()
