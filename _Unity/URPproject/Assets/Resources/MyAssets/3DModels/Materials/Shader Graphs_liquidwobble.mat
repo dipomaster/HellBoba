@@ -48,12 +48,12 @@ Material:
     - _WobbleX: 293.5
     - _WobbleZ: 0
     - _topFace: 0
-    - hit: 0
+    - hit: 1
     - midSmooth: 0.799
     - midfill: 2.332
     - multiplier: 2
-    - opacity: 0.056
-    - opacitybody: 1
+    - opacity: 0.3
+    - opacitybody: 0.5
     - topSmooth: 0.365
     m_Colors:
     - Color_3decd56b2f30499dafbd775639e94295: {r: 1, g: 0.46666667, b: 0, a: 0.84313726}

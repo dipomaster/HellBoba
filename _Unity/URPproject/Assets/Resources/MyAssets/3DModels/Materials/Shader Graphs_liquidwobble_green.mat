@@ -48,7 +48,7 @@ Material:
     - midfill: 0.641
     - multiplier: 1
     - opacity: 0.24
-    - opacitybody: 0.95
+    - opacitybody: 0.7
     - topSmooth: 0.6
     m_Colors:
     - Color_3decd56b2f30499dafbd775639e94295: {r: 1, g: 0.253816, b: 0.20392156, a: 1}

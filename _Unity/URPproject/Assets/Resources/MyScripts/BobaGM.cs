@@ -8,6 +8,7 @@ public class BobaGM : MonoBehaviour
     public GameObject Cup, Table,airParticle;
     protected Boba orderDrink;
     public Boba currentDrink;
+    public GameObject sideHand, topHand;
     public float speed;
     private float Acceleration = 15;
 
@@ -20,12 +21,27 @@ public class BobaGM : MonoBehaviour
     private float Speed = 0;
     static float t = 0.0f;
     private ParticleSystem ps;
+    private int stageN=0;
 
     public void Next()
     {
+        stageN++;
+        
+        switch (stageN)
+        {
+            case 1:
+                //topHand.GetComponent<SpriteRenderer>().enabled = true;
+               topHand.GetComponent<Animator>().SetBool("_anim_Trg", true);
+                break;
+            case 2:
+               sideHand.GetComponent<Animator>().SetBool("_anim_Trg", true);
+                break;
+            default:
+                break;
+        }
         if (!move)
         {
-            i++;
+            //i++;
             Cup.GetComponent<Animator>().SetBool("Move", true);
             Table.GetComponent<Animator>().SetBool("_TableTransition", true);
             //GetComponent<Animator>().SetBool("_move", true);
@@ -37,6 +53,7 @@ public class BobaGM : MonoBehaviour
             airMove();
             move = true;
         }
+        
        // Debug.LogWarning(move);
     }
 
