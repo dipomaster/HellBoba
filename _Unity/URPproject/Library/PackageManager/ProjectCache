@@ -268,12 +268,14 @@ m_ResolvedPackages:
     - 1.14.9
     - 1.14.12
     - 1.14.13
+    - 1.14.15
     - 1.15.1
     - 1.15.4
     - 1.15.7
     - 1.15.9
     - 1.15.12
     - 1.15.13
+    - 1.15.15
     - 2.0.0-preview.6
     - 2.0.0-preview.8
     - 2.0.0-preview.15
@@ -300,12 +302,14 @@ m_ResolvedPackages:
     - 1.14.9
     - 1.14.12
     - 1.14.13
+    - 1.14.15
     - 1.15.1
     - 1.15.4
     - 1.15.7
     - 1.15.9
     - 1.15.12
     - 1.15.13
+    - 1.15.15
     - 2.0.0-preview.6
     - 2.0.0-preview.8
     - 2.0.0-preview.15
@@ -3546,10 +3550,12 @@ m_ResolvedPackages:
     - 2.0.0
     - 2.0.1-preview.1
     - 2.0.2
+    - 3.0.1
     compatible:
     - 2.0.0
     - 2.0.1-preview.1
     - 2.0.2
+    - 3.0.1
     verified: 2.0.2
   dependencies: []
   resolvedDependencies: []
@@ -3609,6 +3615,7 @@ m_ResolvedPackages:
     - 2.0.2
     - 2.1.0
     - 2.1.1
+    - 2.1.2
     - 3.0.0
     - 3.0.1
     - 4.0.0
@@ -3626,8 +3633,10 @@ m_ResolvedPackages:
     - 6.0.0
     - 6.0.1
     - 6.0.2
+    - 6.0.3
     - 7.0.0-pre.3
     - 7.0.0-pre.4
+    - 7.0.0
     compatible:
     - 5.0.0
     verified: 5.0.0
@@ -3877,11 +3886,13 @@ m_ResolvedPackages:
     - 4.6.0-preview
     - 4.7.0-preview
     - 4.9.1
+    - 4.9.2
     compatible:
     - 4.3.2
     - 4.6.0-preview
     - 4.7.0-preview
     - 4.9.1
+    - 4.9.2
     verified: 4.3.2
   dependencies: []
   resolvedDependencies: []

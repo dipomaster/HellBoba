@@ -21,40 +21,15 @@ public class BobaGM : MonoBehaviour
     private float Speed = 0;
     static float t = 0.0f;
     private ParticleSystem ps;
-    private int stageN=0;
+    public int stageN=0;
+    public string playAnim;
 
     public void Next()
     {
         stageN++;
-        
-        switch (stageN)
-        {
-            case 1:
-                //topHand.GetComponent<SpriteRenderer>().enabled = true;
-               topHand.GetComponent<Animator>().SetBool("_anim_Trg", true);
-                break;
-            case 2:
-               sideHand.GetComponent<Animator>().SetBool("_anim_Trg", true);
-                break;
-            default:
-                break;
-        }
-        if (!move)
-        {
-            //i++;
-            Cup.GetComponent<Animator>().SetBool("Move", true);
-            Table.GetComponent<Animator>().SetBool("_TableTransition", true);
-            //GetComponent<Animator>().SetBool("_move", true);
-
-            Deceleration = Random.Range(0.5f, 0.75f);
-
-            Cup.GetComponent<Animator>().SetFloat("_COffset", Deceleration);
-            MaxSpeed = Time.time;
-            airMove();
+       
+          
             move = true;
-        }
-        
-       // Debug.LogWarning(move);
     }
 
     public void Reset()
@@ -88,20 +63,60 @@ public class BobaGM : MonoBehaviour
     // Update is called once per frame
     public void Update()
     {
-        //Debug.LogWarning(move);
-        if (move)
-        {  airMove();          
-            if (Time.time > MaxSpeed + (1 / Deceleration))
-            {
-                Cup.GetComponent<Animator>().SetBool("Move", false);
-                Table.GetComponent<Animator>().SetBool("_TableTransition", false);
-                //Cup.GetComponent<Animator>().SetBool("_move", false);
-                
-                move = false;
-                
-            }
-        }
         
+        if(move)
+        switch (playAnim)
+        {
+            case "topdown":
+                {
+                    // playAnim = "sidehand";
+                    topHand.GetComponent<Animator>().SetBool("_anim_Trg", true);
+
+                }
+                break;
+
+                case "sidehand":
+                    {
+                        
+                            topHand.GetComponent<Animator>().SetBool("_anim_Trg", false);
+                            sideHand.GetComponent<Animator>().SetBool("_anim_Trg", true);
+
+
+                        Cup.GetComponent<Animator>().SetBool("Move", false);
+                        Table.GetComponent<Animator>().SetBool("_TableTransition", false);
+                        playAnim = "moving";
+                    }
+                    break;
+                case "moving":
+                {
+                    Cup.GetComponent<Animator>().SetBool("Move", true);
+                    Table.GetComponent<Animator>().SetBool("_TableTransition", true);
+                    //GetComponent<Animator>().SetBool("_move", true);
+
+                    Deceleration = Random.Range(0.5f, 0.75f);
+
+                    Cup.GetComponent<Animator>().SetFloat("_COffset", Deceleration);
+                    MaxSpeed = Time.time;
+                    airMove();
+                        
+                }
+                break;
+                case "reset":
+                    {
+                       
+                        Cup.GetComponent<Animator>().SetBool("Move", false);
+                        Table.GetComponent<Animator>().SetBool("_TableTransition", false);
+                        playAnim = "moving";
+                        move = false;
+                        
+                    }
+                    break;
+                default:
+
+                    break;
+        }
+
+
         if (air)
         {   
             var no = ps.noise;
@@ -116,12 +131,7 @@ public class BobaGM : MonoBehaviour
                 
             }
         }
-        //if (Cup.GetComponentInChildren<Rigidbody>().IsSleeping())
-        //{
-        //    Cup.GetComponent<Animator>().SetBool("Move", false);
-        //    Table.GetComponent<Animator>().SetBool("_TableTransition", false);
-        //    ///move = false;
-        //}
+      
         if (reset)
         {
             if (Time.time > MaxSpeed + (1 / Deceleration))
@@ -149,4 +159,6 @@ public class BobaGM : MonoBehaviour
          orderDrink.Ice=true;
         orderIN = true;
     }
+
+   
 }
