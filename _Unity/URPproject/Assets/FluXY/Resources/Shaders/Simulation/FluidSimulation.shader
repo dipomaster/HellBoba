@@ -475,8 +475,15 @@
                 o.vertex = mul(UNITY_MATRIX_P, float4(v.uv.xy,0,1));
                 o.vertex.xy = VertexToTile(o.vertex.xy,_TileIndex);
           
-                half3 wNormal = UnityObjectToWorldNormal(v.normal);
-                half3 wTangent = UnityObjectToWorldDir(v.tangent.xyz);
+                // UnityObjectToWorldNormal without normalization:
+                half3 wNormal = mul(v.normal, (float3x3)unity_WorldToObject);
+
+                // UnityObjectToWorldDir without normalization:
+                half3 wTangent = mul((float3x3)unity_ObjectToWorld, v.tangent.xyz);
+
+                // normalize avoiding div by zero:
+                wNormal /= max(length(wNormal),0.00001);
+                wTangent /= max(length(wTangent),0.00001);
 
                 // compute bitangent from cross product of normal and tangent
                 half tangentSign = v.tangent.w * unity_WorldTransformParams.w;

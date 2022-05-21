@@ -21,8 +21,11 @@ namespace Fluxy
         }
 
         SerializedProperty m_Solver;
+        SerializedProperty containerShape;
         SerializedProperty customMesh;
         SerializedProperty size;
+        SerializedProperty lightSource;
+
         SerializedProperty subdivisions;
         SerializedProperty targetList;
         SerializedProperty clearTexture;
@@ -59,9 +62,11 @@ namespace Fluxy
         public void OnEnable()
         {
             m_Solver = serializedObject.FindProperty("m_Solver");
+            containerShape = serializedObject.FindProperty("containerShape");
             customMesh = serializedObject.FindProperty("customMesh");
             subdivisions = serializedObject.FindProperty("subdivisions");
             size = serializedObject.FindProperty("size");
+
             targetList = serializedObject.FindProperty("targets");
             clearTexture = serializedObject.FindProperty("clearTexture");
             clearColor = serializedObject.FindProperty("clearColor");
@@ -86,6 +91,7 @@ namespace Fluxy
             turbulence = serializedObject.FindProperty("turbulence");
             dissipation = serializedObject.FindProperty("dissipation");
             gravity = serializedObject.FindProperty("gravity");
+            lightSource = serializedObject.FindProperty("lightSource");
             externalForce = serializedObject.FindProperty("externalForce");
 
             shapeFoldout = new BooleanPreference($"{target.GetType()}.shapeFoldout", true);
@@ -114,9 +120,13 @@ namespace Fluxy
             if (shapeFoldout)
             {
                 EditorGUI.indentLevel++;
-                EditorGUILayout.PropertyField(customMesh);
-                if (customMesh.objectReferenceValue == null)
+                EditorGUILayout.PropertyField(containerShape);
+
+                if (containerShape.enumValueIndex == 2)
+                    EditorGUILayout.PropertyField(customMesh);
+                if (containerShape.enumValueIndex == 0)
                     EditorGUILayout.PropertyField(subdivisions);
+
                 EditorGUILayout.PropertyField(size);
                 EditorGUI.indentLevel--;
             }
@@ -164,6 +174,7 @@ namespace Fluxy
                 EditorGUILayout.PropertyField(accelerationScale);
                 EditorGUILayout.PropertyField(gravity);
                 EditorGUILayout.PropertyField(externalForce);
+                EditorGUILayout.PropertyField(lightSource);
                 EditorGUILayout.PropertyField(targetList);
                 EditorGUI.indentLevel--;
             }

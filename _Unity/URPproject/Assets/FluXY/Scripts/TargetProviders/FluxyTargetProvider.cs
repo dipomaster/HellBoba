@@ -1,16 +1,17 @@
 ﻿using UnityEngine;
+using System.Collections.Generic;
 
 namespace Fluxy
 {
     public interface IFluxyTargetProvider
     {
-        FluxyTarget[] GetTargets(out int targetCount);
+        List<FluxyTarget> GetTargets();
     }
 
     [DisallowMultipleComponent]
     [RequireComponent(typeof(FluxyContainer))]
     public abstract class FluxyTargetProvider : MonoBehaviour, IFluxyTargetProvider
     {
-        public abstract FluxyTarget[] GetTargets(out int targetCount);
+        public abstract List<FluxyTarget> GetTargets();
     }
 }

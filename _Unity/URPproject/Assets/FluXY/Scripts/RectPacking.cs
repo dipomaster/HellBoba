@@ -22,6 +22,7 @@ namespace Fluxy
         public static Vector2 Pack(Vector4[] rects, int[] indices, int first, int length, int margin)
         {
             var comparer = new RectComparer();
+
             // sort the boxes for insertion by descending height, then width.
             System.Array.Sort(rects, indices, first, length, comparer);
             System.Array.Sort(rects, first, length, comparer);

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections.Generic;
 
 namespace Fluxy
 {
@@ -7,30 +8,32 @@ namespace Fluxy
     public class FluxyTargetDetector : FluxyTargetProvider
     {
         public Vector3 size = new Vector3(0.5f, 0.5f, 0.5f);
-        public int maxTargets = 4;
+        public int maxColliders = 32;
         public LayerMask layers = ~0;
 
         private Collider[] colliders = new Collider[0];
-        private FluxyTarget[] targets = new FluxyTarget[0];
+        private List<FluxyTarget> targets = new List<FluxyTarget>();
 
         public void OnValidate()
         {
-            Array.Resize(ref colliders, maxTargets);
-            Array.Resize(ref targets, maxTargets);
+            Array.Resize(ref colliders, maxColliders);
         }
 
         public void Awake()
         {
-            Array.Resize(ref colliders, maxTargets);
-            Array.Resize(ref targets, maxTargets);
+            Array.Resize(ref colliders, maxColliders);
         }
 
-        public override FluxyTarget[] GetTargets(out int targetCount)
+        public override List<FluxyTarget> GetTargets()
         {
-            targetCount = Physics.OverlapBoxNonAlloc(transform.position, size * 0.5f, colliders, Quaternion.identity, layers);
+            targets.Clear();
+            int targetCount = Physics.OverlapBoxNonAlloc(transform.position, size * 0.5f, colliders, Quaternion.identity, layers);
 
             for (int i = 0; i < targetCount; ++i)
-                colliders[i].TryGetComponent(out targets[i]);
+            {
+                if (colliders[i].TryGetComponent(out FluxyTarget target))
+                    targets.Add(target);
+            }
 
             return targets;
         }

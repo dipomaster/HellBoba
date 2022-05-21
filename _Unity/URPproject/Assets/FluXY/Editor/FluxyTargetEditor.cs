@@ -22,6 +22,7 @@ namespace Fluxy
         SerializedProperty rateOverDistance;
 
         SerializedProperty scaleWithDistance;
+        SerializedProperty scaleWithTransform;
         SerializedProperty overridePosition;
         SerializedProperty overrideRotation;
         SerializedProperty position;
@@ -38,6 +39,7 @@ namespace Fluxy
         SerializedProperty velocityScale;
         SerializedProperty angularVelocityScale;
         SerializedProperty force;
+        SerializedProperty torque;
 
         SerializedProperty densityWeight;
         SerializedProperty densityTexture;
@@ -46,10 +48,19 @@ namespace Fluxy
         SerializedProperty blendOp;
         SerializedProperty color;
 
+        SerializedProperty noiseTexture;
+        SerializedProperty densityNoise;
+        SerializedProperty densityNoiseOffset;
+        SerializedProperty densityNoiseTiling;
+        SerializedProperty velocityNoise;
+        SerializedProperty velocityNoiseOffset;
+        SerializedProperty velocityNoiseTiling;
+
         BooleanPreference splatFoldout;
         BooleanPreference placementFoldout;
         BooleanPreference velocityFoldout;
         BooleanPreference densityFoldout;
+        BooleanPreference noiseFoldout;
 
         public void OnEnable()
         {
@@ -59,6 +70,7 @@ namespace Fluxy
             rateOverDistance = serializedObject.FindProperty("rateOverDistance");
 
             scaleWithDistance = serializedObject.FindProperty("scaleWithDistance");
+            scaleWithTransform = serializedObject.FindProperty("scaleWithTransform");
             overridePosition = serializedObject.FindProperty("overridePosition");
             overrideRotation = serializedObject.FindProperty("overrideRotation");
             position = serializedObject.FindProperty("position");
@@ -75,6 +87,7 @@ namespace Fluxy
             velocityScale = serializedObject.FindProperty("velocityScale");
             angularVelocityScale = serializedObject.FindProperty("angularVelocityScale");
             force = serializedObject.FindProperty("force");
+            torque = serializedObject.FindProperty("torque");
 
             densityWeight = serializedObject.FindProperty("densityWeight");
             densityTexture = serializedObject.FindProperty("densityTexture");
@@ -83,10 +96,19 @@ namespace Fluxy
             blendOp = serializedObject.FindProperty("blendOp");
             color = serializedObject.FindProperty("color");
 
+            noiseTexture = serializedObject.FindProperty("noiseTexture");
+            velocityNoise = serializedObject.FindProperty("velocityNoise");
+            velocityNoiseOffset = serializedObject.FindProperty("velocityNoiseOffset");
+            velocityNoiseTiling = serializedObject.FindProperty("velocityNoiseTiling");
+            densityNoise = serializedObject.FindProperty("densityNoise");
+            densityNoiseOffset = serializedObject.FindProperty("densityNoiseOffset");
+            densityNoiseTiling = serializedObject.FindProperty("densityNoiseTiling");
+
             splatFoldout = new BooleanPreference($"{target.GetType()}.splatFoldout", true);
             placementFoldout = new BooleanPreference($"{target.GetType()}.placementFoldout", true);
             velocityFoldout = new BooleanPreference($"{target.GetType()}.velocityFoldout", false);
             densityFoldout = new BooleanPreference($"{target.GetType()}.densityFoldout", false);
+            noiseFoldout = new BooleanPreference($"{target.GetType()}.noiseFoldout", false);
         }
 
         public override void OnInspectorGUI()
@@ -129,6 +151,7 @@ namespace Fluxy
                 EditorGUILayout.PropertyField(rotationRandomness);
 
                 EditorGUILayout.PropertyField(scaleWithDistance);
+                EditorGUILayout.PropertyField(scaleWithTransform);
                 EditorGUILayout.PropertyField(scale);
                 EditorGUILayout.PropertyField(scaleRandomness);
                 EditorGUI.indentLevel--;
@@ -146,6 +169,7 @@ namespace Fluxy
                 EditorGUILayout.PropertyField(velocityScale);
                 EditorGUILayout.PropertyField(angularVelocityScale);
                 EditorGUILayout.PropertyField(force);
+                EditorGUILayout.PropertyField(torque);
                 EditorGUI.indentLevel--;
             }
             EditorGUILayout.EndFoldoutHeaderGroup();
@@ -160,6 +184,21 @@ namespace Fluxy
                 EditorGUILayout.PropertyField(dstBlend);
                 EditorGUILayout.PropertyField(blendOp);
                 EditorGUILayout.PropertyField(color);
+                EditorGUI.indentLevel--;
+            }
+            EditorGUILayout.EndFoldoutHeaderGroup();
+
+            noiseFoldout.value = EditorGUILayout.BeginFoldoutHeaderGroup(noiseFoldout, "Noise");
+            if (noiseFoldout)
+            {
+                EditorGUI.indentLevel++;
+                EditorGUILayout.PropertyField(noiseTexture);
+                EditorGUILayout.PropertyField(velocityNoise);
+                EditorGUILayout.PropertyField(velocityNoiseOffset);
+                EditorGUILayout.PropertyField(velocityNoiseTiling);
+                EditorGUILayout.PropertyField(densityNoise);
+                EditorGUILayout.PropertyField(densityNoiseOffset);
+                EditorGUILayout.PropertyField(densityNoiseTiling);
                 EditorGUI.indentLevel--;
             }
             EditorGUILayout.EndFoldoutHeaderGroup();

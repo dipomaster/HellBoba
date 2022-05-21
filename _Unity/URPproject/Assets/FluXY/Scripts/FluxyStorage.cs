@@ -236,11 +236,11 @@ namespace Fluxy
             var velocityFormat = GetRenderTextureFormat(velocityPrecision);
 
             // create new buffers:
-            var velocityA = RenderTexture.GetTemporary(resolution, resolution, 0, velocityFormat);
-            var velocityB = RenderTexture.GetTemporary(resolution, resolution, 0, velocityFormat);
-            var stateA = RenderTexture.GetTemporary(resolution * fb.stateSupersampling, resolution * fb.stateSupersampling, 0, densityFormat);
-            var stateB = RenderTexture.GetTemporary(resolution * fb.stateSupersampling, resolution * fb.stateSupersampling, 0, densityFormat);
-            var tileID = RenderTexture.GetTemporary(resolution, resolution, 0, RenderTextureFormat.RHalf);
+            var velocityA = RenderTexture.GetTemporary(resolution, resolution, 0, velocityFormat, RenderTextureReadWrite.Linear);
+            var velocityB = RenderTexture.GetTemporary(resolution, resolution, 0, velocityFormat, RenderTextureReadWrite.Linear);
+            var stateA = RenderTexture.GetTemporary(resolution * fb.stateSupersampling, resolution * fb.stateSupersampling, 0, densityFormat, RenderTextureReadWrite.Linear);
+            var stateB = RenderTexture.GetTemporary(resolution * fb.stateSupersampling, resolution * fb.stateSupersampling, 0, densityFormat, RenderTextureReadWrite.Linear);
+            var tileID = RenderTexture.GetTemporary(resolution, resolution, 0, RenderTextureFormat.RHalf, RenderTextureReadWrite.Linear);
 
             velocityA.filterMode = FilterMode.Point;
             velocityB.filterMode = FilterMode.Point;

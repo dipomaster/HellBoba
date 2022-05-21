@@ -57,17 +57,36 @@ namespace Fluxy
             CopyOrientation
         }
 
+        public enum ContainerShape
+        {
+            Plane,
+            Volume,
+            Custom
+        }
+
         /// <summary>
-        /// Size of the container in local space.
+        /// Shape of the container: can be flat, can be a volume, or can be a custom mesh.
+        /// </summary>
+        [Tooltip("Shape of the container: can be flat, can be a volume, or can be a custom mesh.")]
+        public ContainerShape containerShape = ContainerShape.Plane;
+
+        /// <summary>
+        /// Amount of subdivisions in the plane mesh.
+        /// </summary>
+        [Tooltip("Amount of subdivisions in the plane mesh.")]
+        public Vector2Int subdivisions = Vector2Int.one;
+
+        /// <summary>
+        /// Custom mesh used by the container. If null, a subdivided plane will be used instead.
         /// </summary>
         [Tooltip("Custom mesh used by the container. If null, a subdivided plane will be used instead.")]
         public Mesh customMesh = null;
 
-        [Tooltip("Amount of subdivisions in the plane mesh.")]
-        public Vector2Int subdivisions = Vector2Int.one;
-
+        /// <summary>
+        /// Size of the container in local space.
+        /// </summary>
         [Tooltip("Size of the container in local space.")]
-        public Vector2 size = Vector2.one;
+        public Vector3 size = Vector3.one;
 
         /// <summary>
         /// Method using for facing the lookAt transform: look to it, or copy its orientation.
@@ -157,6 +176,12 @@ namespace Fluxy
         public Vector3 externalForce = Vector3.zero;
 
         /// <summary>
+        /// Lightsource used for volume rendering.
+        /// </summary>
+        [Tooltip("Lightsource used for volume rendering.")]
+        public Light lightSource = null;
+
+        /// <summary>
         /// List of targets that should be splatted onto this container.
         /// </summary>
         [Tooltip("List of targets that should be splatted onto this container.")]
@@ -213,13 +238,16 @@ namespace Fluxy
 
         [SerializeField] [HideInInspector] private FluxySolver m_Solver;
 
+        private Renderer m_Renderer;
+        private MaterialPropertyBlock propertyBlock;
+
         private Vector3 m_Velocity;
         private Vector3 m_AngularVelocity;
         private Vector3 oldPosition;
         private Quaternion oldRotation;
         private Vector3 oldVelocity;
 
-        protected Mesh planeMesh;
+        protected Mesh proceduralMesh;
         protected Vector3[] vertices;
         protected Vector3[] normals;
         protected Vector4[] tangents;
@@ -251,14 +279,22 @@ namespace Fluxy
             get { return m_AngularVelocity; }
         }
 
+        public Renderer containerRenderer
+        {
+            get { return m_Renderer; }
+        }
+
         public Mesh containerMesh
         {
-            get { return customMesh != null ? customMesh : planeMesh; }
+            get { return customMesh != null ? customMesh : proceduralMesh; }
         }
 
         protected virtual void OnEnable()
         {
-            UpdateMesh();
+            m_Renderer = GetComponent<Renderer>();
+            propertyBlock = new MaterialPropertyBlock();
+
+            UpdateContainerShape();
             SetSolver(m_Solver, false);
             oldPosition = transform.position;
             oldRotation = transform.rotation;
@@ -266,7 +302,7 @@ namespace Fluxy
 
         protected virtual void OnDisable()
         {
-            DestroyImmediate(planeMesh);
+            DestroyImmediate(proceduralMesh);
             SetSolver(null, false);
         }
 
@@ -280,28 +316,30 @@ namespace Fluxy
         {
             subdivisions.x = Mathf.Max(1, subdivisions.x);
             subdivisions.y = Mathf.Max(1, subdivisions.y);
-            UpdateMesh();
+            UpdateContainerShape();
         }
 
-        protected virtual void UpdateMesh()
+        public virtual void UpdateContainerShape()
         {
-            if (customMesh != null)
+            switch (containerShape)
             {
-                if (planeMesh != null)
-                    DestroyImmediate(planeMesh);
-
-                GetComponent<MeshFilter>().sharedMesh = customMesh;
-                return;
+                case ContainerShape.Plane: BuildPlaneMesh(); break;
+                case ContainerShape.Volume: BuildVolumeMesh(); break;
+                case ContainerShape.Custom: BuildCustomMesh(); break;
             }
-            else if (planeMesh == null)
+        }
+
+        protected void BuildPlaneMesh()
+        {
+            if (proceduralMesh == null)
             {
-                planeMesh = new Mesh();
-                planeMesh.name = "FluidContainer";
-                GetComponent<MeshFilter>().sharedMesh = planeMesh;
+                proceduralMesh = new Mesh();
+                proceduralMesh.name = "FluidContainer";
+                GetComponent<MeshFilter>().sharedMesh = proceduralMesh;
             }
 
             // create a new mesh:
-            planeMesh.Clear();
+            proceduralMesh.Clear();
 
             subdivisions.x = Mathf.Max(1, subdivisions.x);
             subdivisions.y = Mathf.Max(1, subdivisions.y);
@@ -311,9 +349,9 @@ namespace Fluxy
             int triangleCount = subdivisions.x * subdivisions.y * 2;
 
             if (vertexCount > 65535)
-                planeMesh.indexFormat = IndexFormat.UInt32;
+                proceduralMesh.indexFormat = IndexFormat.UInt32;
             else
-                planeMesh.indexFormat = IndexFormat.UInt16;
+                proceduralMesh.indexFormat = IndexFormat.UInt16;
 
             vertices = new Vector3[vertexCount];
             normals = new Vector3[vertexCount];
@@ -357,12 +395,115 @@ namespace Fluxy
                 }
             }
 
-            planeMesh.SetVertices(vertices);
-            planeMesh.SetNormals(normals);
-            planeMesh.SetTangents(tangents);
-            planeMesh.SetUVs(0, uvs);
-            planeMesh.SetIndices(triangles, MeshTopology.Triangles, 0);
-            planeMesh.RecalculateNormals();
+            proceduralMesh.SetVertices(vertices);
+            proceduralMesh.SetNormals(normals);
+            proceduralMesh.SetTangents(tangents);
+            proceduralMesh.SetUVs(0, uvs);
+            proceduralMesh.SetIndices(triangles, MeshTopology.Triangles, 0);
+            proceduralMesh.RecalculateNormals();
+        }
+
+        protected void BuildVolumeMesh()
+        {
+            if (proceduralMesh == null)
+            {
+                proceduralMesh = new Mesh();
+                proceduralMesh.name = "FluidContainer";
+                GetComponent<MeshFilter>().sharedMesh = proceduralMesh;
+            }
+
+            // create a new mesh:
+            proceduralMesh.Clear();
+
+            int vertexCount = 24;
+            int triangleCount = 8;
+
+            proceduralMesh.indexFormat = IndexFormat.UInt32;
+
+            tangents = null;
+            uvs = new Vector2[vertexCount];
+            triangles = new int[triangleCount * 3];
+
+            Vector3[] c = new Vector3[8];
+
+            float length = size.x;
+            float width = size.y;
+            float height = size.z; 
+            c[0] = new Vector3(-length * .5f, -width * .5f, height * .5f);
+            c[1] = new Vector3(length * .5f, -width * .5f, height * .5f);
+            c[2] = new Vector3(length * .5f, -width * .5f, -height * .5f);
+            c[3] = new Vector3(-length * .5f, -width * .5f, -height * .5f);
+
+            c[4] = new Vector3(-length * .5f, width * .5f, height * .5f);
+            c[5] = new Vector3(length * .5f, width * .5f, height * .5f);
+            c[6] = new Vector3(length * .5f, width * .5f, -height * .5f);
+            c[7] = new Vector3(-length * .5f, width * .5f, -height * .5f);
+
+            vertices = new Vector3[]
+            {
+                c[0], c[1], c[2], c[3], // Bottom
+	            c[7], c[4], c[0], c[3], // Left
+	            c[4], c[5], c[1], c[0], // Front
+	            c[6], c[7], c[3], c[2], // Back
+	            c[5], c[6], c[2], c[1], // Right
+	            c[7], c[6], c[5], c[4]  // Top
+            };
+
+            Vector3 up = -Vector3.up;
+            Vector3 down = -Vector3.down;
+            Vector3 forward = -Vector3.forward;
+            Vector3 back = -Vector3.back;
+            Vector3 left = -Vector3.left;
+            Vector3 right = -Vector3.right;
+
+            normals = new Vector3[]
+            {
+                down, down, down, down,             // Bottom
+	            left, left, left, left,             // Left
+	            forward, forward, forward, forward,	// Front
+	            back, back, back, back,             // Back
+	            right, right, right, right,         // Right
+	            up, up, up, up	                    // Top
+            };
+
+            Vector2 uv00 = new Vector2(0f, 0f);
+            Vector2 uv10 = new Vector2(1f, 0f);
+            Vector2 uv01 = new Vector2(0f, 1f);
+            Vector2 uv11 = new Vector2(1f, 1f);
+
+            uvs = new Vector2[]
+            {
+                uv11, uv01, uv00, uv10, // Bottom
+	            uv11, uv01, uv00, uv10, // Left
+	            uv11, uv01, uv00, uv10, // Front
+	            uv11, uv01, uv00, uv10, // Back	        
+	            uv11, uv01, uv00, uv10, // Right 
+	            uv11, uv01, uv00, uv10  // Top
+            };
+
+            triangles = new int[]
+            {
+                0, 1, 3,        1, 2, 3,        // Bottom	
+	            4, 5, 7,        5, 6, 7,        // Left
+	            8, 9, 11,       9, 10, 11,      // Front
+	            12, 13, 15,     13, 14, 15,     // Back
+	            16, 17, 19,     17, 18, 19,	    // Right
+	            20, 21, 23,     21, 22, 23,	    // Top
+            };
+
+            proceduralMesh.SetVertices(vertices);
+            proceduralMesh.SetNormals(normals);
+            proceduralMesh.SetUVs(0, uvs);
+            proceduralMesh.SetIndices(triangles, MeshTopology.Triangles, 0);
+        }
+
+        protected void BuildCustomMesh()
+        {
+            if (proceduralMesh != null)
+                DestroyImmediate(proceduralMesh);
+
+            if (customMesh != null)
+                GetComponent<MeshFilter>().sharedMesh = customMesh;
         }
 
         private void SetSolver(FluxySolver newSolver, bool setMember)
@@ -446,6 +587,49 @@ namespace Fluxy
             Shader.SetGlobalVector("_ContainerSize", size);
         }
 
+        public virtual void UpdateMaterial(int tile, FluxyStorage.Framebuffer fb)
+        {
+            if (m_Renderer == null || m_Renderer.sharedMaterial == null || fb == null)
+                return;
+            
+            containerRenderer.GetPropertyBlock(propertyBlock);
+
+            propertyBlock.SetInt("_TileIndex", tile);
+            propertyBlock.SetTexture("_MainTex", fb.stateA);
+            propertyBlock.SetTexture("_Velocity", fb.velocityA);
+
+            if (lightSource != null && lightSource.isActiveAndEnabled && lightSource.type == LightType.Directional)
+            {
+                m_Renderer.sharedMaterial.EnableKeyword("_LIGHTSOURCE_DIRECTIONAL");
+                m_Renderer.sharedMaterial.DisableKeyword("_LIGHTSOURCE_POINT");
+                m_Renderer.sharedMaterial.DisableKeyword("_LIGHTSOURCE_NONE");
+
+                propertyBlock.SetVector("_LightVector", transform.InverseTransformDirection(lightSource.transform.forward));
+                propertyBlock.SetVector("_LightColor", lightSource.color * lightSource.intensity);
+
+            }
+            else if (lightSource != null && lightSource.isActiveAndEnabled && lightSource.type == LightType.Point)
+            {
+                m_Renderer.sharedMaterial.DisableKeyword("_LIGHTSOURCE_DIRECTIONAL");
+                m_Renderer.sharedMaterial.EnableKeyword("_LIGHTSOURCE_POINT");
+                m_Renderer.sharedMaterial.DisableKeyword("_LIGHTSOURCE_NONE");
+
+                Vector4 lightVec = transform.InverseTransformPoint(lightSource.transform.position);
+                lightVec.w = 1f / Mathf.Max(lightSource.range * lightSource.range, 0.00001f);
+                propertyBlock.SetVector("_LightVector", lightVec);
+                propertyBlock.SetVector("_LightColor", lightSource.color * lightSource.intensity);
+            }
+            else
+            {
+                m_Renderer.sharedMaterial.DisableKeyword("_LIGHTSOURCE_DIRECTIONAL");
+                m_Renderer.sharedMaterial.DisableKeyword("_LIGHTSOURCE_POINT");
+                m_Renderer.sharedMaterial.EnableKeyword("_LIGHTSOURCE_NONE");
+                propertyBlock.SetVector("_LightColor", Color.white);
+            }
+
+            containerRenderer.SetPropertyBlock(propertyBlock);
+        }
+
         public virtual Vector4 ProjectTarget(in Vector3 targetPosition, Vector2 projectionSize, float aspectRatio, bool scaleWithDistance = true)
         {
             var origin = GetProjectionOrigin(targetPosition);
@@ -474,7 +658,7 @@ namespace Fluxy
                 if (p.Raycast(ray, out float dist))
                 {
                     var point = ray.GetPoint(dist);
-                    var local = transform.InverseTransformPoint(point) / size;
+                    var local = transform.InverseTransformPoint(point) / (Vector2)size;
 
                     float scale = 1;
                     if (scaleWithDistance)
@@ -483,7 +667,7 @@ namespace Fluxy
                         if (p.Raycast(ray, out float dist2))
                         {
                             var point2 = ray.GetPoint(dist2);
-                            var local2 = transform.InverseTransformPoint(point2) / size;
+                            var local2 = transform.InverseTransformPoint(point2) / (Vector2)size;
                             scale = Vector2.Distance(local, local2);
                         }
                     }

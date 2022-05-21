@@ -82,6 +82,12 @@ namespace Fluxy
         public bool scaleWithDistance = true;
 
         /// <summary>
+        /// Scales splat based on maximum transform scale value.
+        /// </summary>
+        [Tooltip("Scales splat based on maximum transform scale value.")]
+        public bool scaleWithTransform = false;
+
+        /// <summary>
         /// Scale of the target's shape when splatted.
         /// </summary>
         [Tooltip("Scale of the target's shape when splatted.")]
@@ -140,6 +146,12 @@ namespace Fluxy
         public Vector3 force = Vector3.zero;
 
         /// <summary>
+        /// Local-space torque applied by this target, regardless of its angular velocity
+        /// </summary>
+        [Tooltip("Local-space torque applied by this target, regardless of its angular velocity")]
+        public float torque = 0;
+
+        /// <summary>
         /// Amount of density splatted.
         /// </summary>
         [Range(0, 1)]
@@ -174,6 +186,55 @@ namespace Fluxy
         /// </summary>
         [Tooltip("Color splatted by this target onto the container's density buffer.")]
         public Color color = Color.white;
+
+        /// <summary>
+        /// Texture used to generate density and velocity noise.
+        /// </summary>
+        [Tooltip("Texture used to generate density and velocity noise.")]
+        public Texture noiseTexture;
+
+        /// <summary>
+        /// Amount of scalar noise modulating density.
+        /// </summary>
+        [Min(0)]
+        [Tooltip("Amount of scalar noise modulating density.")]
+        public float densityNoise = 0;
+
+        /// <summary>
+        /// Non-zero values animate noise by offsetting it.
+        /// </summary>
+        [Min(0)]
+        [Tooltip("Non-zero values animate noise by offsetting it.")]
+        public float densityNoiseOffset = 0;
+
+        /// <summary>
+        /// Tiling scale of density noise.
+        /// </summary>
+        [Min(0)]
+        [Tooltip("Tiling scale of density noise.")]
+        public float densityNoiseTiling= 1;
+
+
+        /// <summary>
+        /// Amount of curl noise added to velocity.
+        /// </summary>
+        [Min(0)]
+        [Tooltip("Amount of curl noise added to velocity.")]
+        public float velocityNoise = 0;
+
+        /// <summary>
+        /// Non-zero values animate noise by offsetting it.
+        /// </summary>
+        [Min(0)]
+        [Tooltip("Non-zero values animate noise by offsetting it.")]
+        public float velocityNoiseOffset = 0;
+
+        /// <summary>
+        /// Tiling scale of velocity noise.
+        /// </summary>
+        [Min(0)]
+        [Tooltip("Tiling scale of velocity noise.")]
+        public float velocityNoiseTiling = 1;
 
         private Vector3 oldPosition;
         private Quaternion oldRotation;
@@ -245,6 +306,9 @@ namespace Fluxy
             {
                 Quaternion worldToContainerR = Quaternion.Inverse(container.transform.rotation);
 
+                var lossyScale = transform.lossyScale;
+                float maxScale = Mathf.Max(Mathf.Max(lossyScale.x, lossyScale.y), lossyScale.z);
+
                 // calculate relative velocities in UV space:
                 Vector3 relativeVelocity = container.TransformWorldVectorToUVSpace(velocity - container.velocity * container.velocityScale, rect);
                 float relativeAngularVel = container.TransformWorldVectorToUVSpace(angularVelocity, rect).z -
@@ -262,12 +326,17 @@ namespace Fluxy
 
                 // clamp and scale angular vel:
                 relativeAngularVel = Mathf.Clamp(relativeAngularVel, -maxRelativeAngularVelocity, maxRelativeAngularVelocity) * angularVelocityScale;
+                relativeAngularVel += torque;
 
                 // pass tile index and blend mode to shader.
                 splatMaterial.SetInt("_TileIndex", tileIndex);
                 splatMaterial.SetInt("_SrcBlend", (int)srcBlend);
                 splatMaterial.SetInt("_DstBlend", (int)dstBlend);
                 splatMaterial.SetInt("_BlendOp", (int)blendOp);
+                splatMaterial.SetTexture("_Noise", noiseTexture);
+
+                var velocityNoiseParams = new Vector3(velocityNoise, velocityNoiseOffset, velocityNoiseTiling);
+                var densityNoiseParams = new Vector3(densityNoise, densityNoiseOffset, densityNoiseTiling);
 
                 // calculate texture aspect ratio:
                 float aspectRatio = GetAspectRatio();
@@ -305,8 +374,12 @@ namespace Fluxy
                         orientation = -(worldToContainerR * Quaternion.Lerp(oldRotation, transform.rotation, interpolationFactor)).eulerAngles.z;
                     splatMaterial.SetFloat("_SplatRotation", orientation * Mathf.Deg2Rad + randomRotation);
 
-                    // pass splat position/scale to shader.
+                    // pass splat scale to shader:
                     Vector2 projectionSize = scale + new Vector2(randomScale, randomScale);
+                    if (scaleWithTransform)
+                        projectionSize *= maxScale;
+
+                    // pass splat position to shader:
                     Vector4 projection;
                     if (overridePosition)
                         projection = new Vector4(position.x, position.y, projectionSize.x * aspectRatio, projectionSize.y);
@@ -318,10 +391,12 @@ namespace Fluxy
                     splatMaterial.SetVector("_SplatTransform", projection + randomOffset);
 
                     // splat state:
+                    splatMaterial.SetVector("_DensityNoiseParams", densityNoiseParams);
                     splatMaterial.SetVector("_SplatWeights", new Color(color.r,color.g,color.b,color.a * densityWeight));
                     Graphics.Blit(densityTexture, fb.stateA, splatMaterial, 0);
 
                     // splat velocity
+                    splatMaterial.SetVector("_VelocityNoiseParams", velocityNoiseParams);
                     splatMaterial.SetFloat("_AngularVelocity", relativeAngularVel);
                     splatMaterial.SetVector("_SplatWeights", vel);
                     splatMaterial.SetTexture("_Velocity", velocityTexture);

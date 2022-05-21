@@ -29,6 +29,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.811, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1486050906835942545}
   m_RootOrder: 2
@@ -52,6 +53,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -94,9 +96,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 93ab69ab277284ee89a7d5c46029d111, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  customMesh: {fileID: 0}
+  containerShape: 0
   subdivisions: {x: 1, y: 1}
-  size: {x: 0.8, y: 0.8}
+  customMesh: {fileID: 0}
+  size: {x: 0.8, y: 0.8, z: 1}
   lookAtMode: 0
   lookAt: {fileID: 0}
   projectFrom: {fileID: 0}
@@ -117,6 +120,7 @@ MonoBehaviour:
   accelerationScale: 1
   gravity: {x: 0, y: 0, z: 0}
   externalForce: {x: 0, y: 0, z: 0}
+  lightSource: {fileID: 0}
   targets:
   - {fileID: 1486050908347765939}
   pressure: 1
@@ -153,6 +157,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1486050907615586545}
   - {fileID: 1486050908347765933}
@@ -189,6 +194,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.20000002, y: 1, z: 0.20000002}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1486050906835942545}
   m_RootOrder: 0
@@ -212,6 +218,7 @@ MeshRenderer:
   m_CastShadows: 1
   m_ReceiveShadows: 1
   m_DynamicOccludee: 1
+  m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
   m_ReflectionProbeUsage: 1
@@ -283,6 +290,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0.646, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1486050906835942545}
   m_RootOrder: 1
@@ -310,6 +318,7 @@ MonoBehaviour:
   rotation: 0
   rotationRandomness: 0
   scaleWithDistance: 1
+  scaleWithTransform: 0
   scale: {x: 0.1, y: 0.1}
   scaleRandomness: 0
   velocityWeight: 1
@@ -319,12 +328,20 @@ MonoBehaviour:
   maxRelativeAngularVelocity: 12
   angularVelocityScale: 1
   force: {x: 0, y: 0, z: 0}
+  torque: 0
   densityWeight: 1
   densityTexture: {fileID: 2800000, guid: e110bd67048ea41b9910c3ea068ca09a, type: 3}
   srcBlend: 1
   dstBlend: 10
   blendOp: 0
   color: {r: 1, g: 1, b: 1, a: 1}
+  noiseTexture: {fileID: 0}
+  densityNoise: 0
+  densityNoiseOffset: 0
+  densityNoiseTiling: 1
+  velocityNoise: 0
+  velocityNoiseOffset: 0
+  velocityNoiseTiling: 1
 --- !u!135 &1486050908347765938
 SphereCollider:
   m_ObjectHideFlags: 0

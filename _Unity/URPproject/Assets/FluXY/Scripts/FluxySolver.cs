@@ -119,8 +119,6 @@ namespace Fluxy
         private int framebufferID = -1;
         private bool tilesDirty;
 
-        private MaterialPropertyBlock propertyBlock;
-
         private Vector4[] rects = new Vector4[MAX_TILES];
         private int[] indices = new int[MAX_TILES];
         private Vector4[] externalForce = new Vector4[MAX_TILES];
@@ -149,9 +147,6 @@ namespace Fluxy
         {
             lodGroup = GetComponent<LODGroup>();
             visibleLOD = GetCurrentLOD(Camera.main);
-
-            propertyBlock = new MaterialPropertyBlock();
-
             UpdateFramebuffer();
         }
 
@@ -424,10 +419,16 @@ namespace Fluxy
             }
         }
 
-        private void UpdateContainerTransforms()
+        private void UpdateContainerTransforms(FluxyStorage.Framebuffer fb)
         {
             for (int i = 0; i < containers.Count; ++i)
-                containers[i].UpdateTransform();
+            {
+                int tile = i + 1;
+                int c = indices[tile];
+
+                containers[c].UpdateTransform();
+                containers[c].UpdateMaterial(tile, fb);
+            }
         }
 
         private void UpdateContainers(FluxyStorage.Framebuffer fb, float deltaTime)
@@ -456,15 +457,6 @@ namespace Fluxy
                 externalForce[tile] = containers[c].gravity + containers[c].externalForce - acceleration * containers[c].accelerationScale;
                 buoyancy[tile] = containers[c].TransformWorldVectorToUVSpace(Vector3.up, rects[tile]) * containers[c].buoyancy;
                 offsets[tile] = containers[c].TransformWorldVectorToUVSpace(containers[c].velocity * deltaTime, rects[tile]) * (1 - containers[c].velocityScale);
-
-                if (containers[c].TryGetComponent(out Renderer renderer))
-                {
-                    renderer.GetPropertyBlock(propertyBlock);
-                    propertyBlock.SetInt("_TileIndex", tile);
-                    propertyBlock.SetTexture("_MainTex", fb.stateA);
-                    propertyBlock.SetTexture("_Velocity", fb.velocityA);
-                    renderer.SetPropertyBlock(propertyBlock);
-                }
             }
 
             simulationMaterial.SetFloatArray("_Pressure", pressure);
@@ -500,9 +492,9 @@ namespace Fluxy
                 // see if the container has a target provider, then retrieve additional targets.
                 if (containers[c].TryGetComponent(out FluxyTargetProvider provider))
                 {
-                    var targets = provider.GetTargets(out int targetCount);
+                    var targets = provider.GetTargets();
 
-                    for (int j = 0; j < targetCount; ++j)
+                    for (int j = 0; j < targets.Count; ++j)
                         if (targets[j] != null)
                             targets[j].Splat(containers[c], fb, tile, rects[tile]);
                 }
@@ -532,12 +524,12 @@ namespace Fluxy
 
                 UpdateTileData();
 
-                UpdateContainerTransforms();
+                var fb = framebuffer;
+
+                UpdateContainerTransforms(fb);
 
                 if (visible && simulationMaterial != null) 
                 {
-
-                    var fb = framebuffer;
 
                     Splat(fb);
 
@@ -548,7 +540,7 @@ namespace Fluxy
                         float timestep = Mathf.Min(deltaTime, maxTimestep);
                         deltaTime -= timestep;
 
-                        UpdateContainers(fb, timestep); // TODO: can do it once per frame? take it out here, see if offsets are affected (infinite pool scene)
+                        UpdateContainers(fb, timestep);
 
                         SimulationStep(fb, timestep);
                     }
